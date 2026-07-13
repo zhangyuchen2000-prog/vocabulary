@@ -5,10 +5,250 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f0e8">
   <title>Daily Five — Vocabulary Practice</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+      <style>
+:root {
+  --paper: #f4f0e8;
+  --ink: #1f2522;
+  --muted: #68706b;
+  --line: rgba(31, 37, 34, 0.13);
+  --card: rgba(255, 255, 255, 0.76);
+  --accent: #315f4b;
+  --accent-soft: #dce9e1;
+  --shadow: 0 18px 50px rgba(31, 37, 34, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 5%, rgba(255,255,255,.9), transparent 30%),
+    linear-gradient(135deg, #f7f4ed 0%, #ece7dc 100%);
+  font-family: "DM Sans", system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+button, input { font: inherit; }
+
+.shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 36px;
+}
+
+.topbar,
+.intro,
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.7rem, 7vw, 5.4rem);
+  line-height: .95;
+  letter-spacing: -.04em;
+}
+
+.date-card {
+  text-align: right;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.45);
+  backdrop-filter: blur(12px);
+}
+
+.date-card span,
+.date-card strong {
+  display: block;
+}
+
+.date-card > span {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-bottom: 5px;
+}
+
+.intro {
+  margin: 34px 0 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.intro p {
+  max-width: 630px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.secondary,
+.reveal {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.secondary {
+  padding: 11px 17px;
+  white-space: nowrap;
+}
+
+.secondary:hover,
+.reveal:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+.word-card {
+  grid-column: span 4;
+  min-height: 310px;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 24px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.word-card:nth-child(4),
+.word-card:nth-child(5) {
+  grid-column: span 6;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.word-card h2 {
+  margin: 34px 0 18px;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -.025em;
+}
+
+.reveal {
+  width: fit-content;
+  padding: 8px 12px;
+  font-size: .86rem;
+}
+
+.details {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.definition {
+  margin: 0 0 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.example {
+  margin: 0;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.learned-row {
+  margin-top: auto;
+  padding-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.learned-row input {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #9ca39f;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.learned-row input:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.learned-row input:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 14px;
+}
+
+.word-card.complete {
+  background: linear-gradient(145deg, rgba(255,255,255,.84), var(--accent-soft));
+}
+
+footer {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.text-button {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 820px) {
+  .word-card,
+  .word-card:nth-child(4),
+  .word-card:nth-child(5) { grid-column: span 6; }
+}
+
+@media (max-width: 600px) {
+  .shell { width: min(100% - 22px, 1120px); padding-top: 28px; }
+  .topbar { align-items: flex-end; }
+  .date-card { padding: 10px 12px; }
+  .intro { align-items: flex-start; flex-direction: column; }
+  .word-card,
+  .word-card:nth-child(4),
+  .word-card:nth-child(5) { grid-column: 1 / -1; min-height: 290px; }
+}
+
+</style>
 </head>
 <body>
   <main class="shell">
@@ -55,7 +295,505 @@
     </article>
   </template>
 
-  <script src="data/words.js"></script>
-  <script src="app.js"></script>
+  <script>
+window.VOCAB_WORDS = [
+  {
+    "word": "preamble",
+    "pos": "noun",
+    "definition": "an introduction to a formal text or statement",
+    "example": "The report begins with a short preamble explaining why the study was conducted."
+  },
+  {
+    "word": "presage",
+    "pos": "verb",
+    "definition": "to suggest that something, often unpleasant, is about to happen",
+    "example": "The sudden silence seemed to presage a difficult announcement."
+  },
+  {
+    "word": "prescient",
+    "pos": "adjective",
+    "definition": "showing knowledge of events before they happen",
+    "example": "Her prescient decision to save extra cash helped when business slowed."
+  },
+  {
+    "word": "predilection",
+    "pos": "noun",
+    "definition": "a particular preference or special fondness",
+    "example": "He has a predilection for small cafés with handwritten menus."
+  },
+  {
+    "word": "precipitate",
+    "pos": "adjective",
+    "definition": "done too quickly and without enough thought",
+    "example": "A precipitate decision could turn a minor problem into a serious one."
+  },
+  {
+    "word": "precedent",
+    "pos": "noun",
+    "definition": "an earlier example used to guide later decisions",
+    "example": "Allowing one late submission may set a precedent for the whole class."
+  },
+  {
+    "word": "pretentious",
+    "pos": "adjective",
+    "definition": "trying to appear more important or knowledgeable than one really is",
+    "example": "The restaurant felt polished rather than pretentious."
+  },
+  {
+    "word": "pretext",
+    "pos": "noun",
+    "definition": "a stated reason that hides the real reason",
+    "example": "He used a coffee break as a pretext to leave the awkward meeting."
+  },
+  {
+    "word": "precocious",
+    "pos": "adjective",
+    "definition": "developing an ability unusually early",
+    "example": "The precocious child could already read simple novels at age five."
+  },
+  {
+    "word": "preclude",
+    "pos": "verb",
+    "definition": "to prevent something from happening",
+    "example": "The injury may preclude her from competing this weekend."
+  },
+  {
+    "word": "tantalize",
+    "pos": "verb",
+    "definition": "to excite someone by showing something desirable but keeping it out of reach",
+    "example": "The bakery window tantalized commuters with trays of warm pastries."
+  },
+  {
+    "word": "pyrrhic",
+    "pos": "adjective",
+    "definition": "won at such a great cost that the victory is barely worthwhile",
+    "example": "Finishing first after losing every teammate felt like a pyrrhic victory."
+  },
+  {
+    "word": "laconic",
+    "pos": "adjective",
+    "definition": "using very few words",
+    "example": "His laconic reply—“Maybe”—did little to clarify the plan."
+  },
+  {
+    "word": "draconian",
+    "pos": "adjective",
+    "definition": "extremely harsh or strict",
+    "example": "The school replaced its draconian phone policy with a more practical rule."
+  },
+  {
+    "word": "jeremiad",
+    "pos": "noun",
+    "definition": "a long complaint or mournful speech",
+    "example": "What began as feedback soon became a twenty-minute jeremiad."
+  },
+  {
+    "word": "nemesis",
+    "pos": "noun",
+    "definition": "a persistent rival or source of downfall",
+    "example": "Time management became her nemesis during exam season."
+  },
+  {
+    "word": "platonic",
+    "pos": "adjective",
+    "definition": "affectionate but not romantic or sexual",
+    "example": "They maintained a close, entirely platonic friendship."
+  },
+  {
+    "word": "spartan",
+    "pos": "adjective",
+    "definition": "simple and lacking comfort or decoration",
+    "example": "The room was spartan, containing only a desk, chair, and narrow bed."
+  },
+  {
+    "word": "juggernaut",
+    "pos": "noun",
+    "definition": "a powerful force that seems impossible to stop",
+    "example": "The small startup grew into a global technology juggernaut."
+  },
+  {
+    "word": "hector",
+    "pos": "verb",
+    "definition": "to bully or pressure someone with aggressive words",
+    "example": "The manager tried to hector the team into working through lunch."
+  },
+  {
+    "word": "nonchalant",
+    "pos": "adjective",
+    "definition": "appearing calm and casually unconcerned",
+    "example": "She gave a nonchalant shrug, although she had practised for weeks."
+  },
+  {
+    "word": "adroit",
+    "pos": "adjective",
+    "definition": "clever and skilful",
+    "example": "He was adroit at turning tense conversations into productive ones."
+  },
+  {
+    "word": "chicanery",
+    "pos": "noun",
+    "definition": "deception or dishonest trickery",
+    "example": "The audit uncovered years of financial chicanery."
+  },
+  {
+    "word": "demur",
+    "pos": "verb",
+    "definition": "to raise an objection or show reluctance",
+    "example": "She agreed to the schedule without demur."
+  },
+  {
+    "word": "rapport",
+    "pos": "noun",
+    "definition": "a friendly relationship based on mutual understanding",
+    "example": "The tutor quickly built a strong rapport with the class."
+  },
+  {
+    "word": "passé",
+    "pos": "adjective",
+    "definition": "no longer fashionable or current",
+    "example": "Some people consider printed maps passé, but travellers still value them."
+  },
+  {
+    "word": "cache",
+    "pos": "noun",
+    "definition": "a hidden or stored collection of useful items or data",
+    "example": "The hikers kept an emergency cache of food near the cabin."
+  },
+  {
+    "word": "raconteur",
+    "pos": "noun",
+    "definition": "a person who tells stories skilfully",
+    "example": "At dinner, the lively raconteur kept everyone entertained."
+  },
+  {
+    "word": "gauche",
+    "pos": "adjective",
+    "definition": "socially awkward or lacking tact",
+    "example": "His gauche joke created an uncomfortable silence."
+  },
+  {
+    "word": "sangfroid",
+    "pos": "noun",
+    "definition": "calmness and composure under pressure",
+    "example": "She handled the kitchen emergency with remarkable sangfroid."
+  },
+  {
+    "word": "liaison",
+    "pos": "noun",
+    "definition": "a person who helps two groups communicate and cooperate",
+    "example": "A student liaison carried questions from the class to the department."
+  },
+  {
+    "word": "droll",
+    "pos": "adjective",
+    "definition": "amusing in an unusual, dry, or odd way",
+    "example": "His droll observations made even routine meetings entertaining."
+  },
+  {
+    "word": "faux pas",
+    "pos": "noun",
+    "definition": "a socially embarrassing mistake",
+    "example": "Forgetting the host’s name was an awkward faux pas."
+  },
+  {
+    "word": "savoir-faire",
+    "pos": "noun",
+    "definition": "the ability to act confidently and appropriately in social situations",
+    "example": "She handled the formal dinner with effortless savoir-faire."
+  },
+  {
+    "word": "zeitgeist",
+    "pos": "noun",
+    "definition": "the ideas and mood that characterize a period of time",
+    "example": "The film captured the anxious zeitgeist of the early digital age."
+  },
+  {
+    "word": "schadenfreude",
+    "pos": "noun",
+    "definition": "pleasure at another person’s misfortune",
+    "example": "He felt a flash of schadenfreude when his boastful rival missed the shot."
+  },
+  {
+    "word": "citadel",
+    "pos": "noun",
+    "definition": "a fortress that protects a city",
+    "example": "The ancient citadel still overlooks the harbour."
+  },
+  {
+    "word": "pastiche",
+    "pos": "noun",
+    "definition": "a work made by combining elements from different styles or sources",
+    "example": "The café interior is a playful pastiche of Art Deco and industrial design."
+  },
+  {
+    "word": "imbroglio",
+    "pos": "noun",
+    "definition": "a complicated and embarrassing situation",
+    "example": "A simple booking error developed into a public imbroglio."
+  },
+  {
+    "word": "bravado",
+    "pos": "noun",
+    "definition": "a bold display intended to impress others",
+    "example": "His bravado disappeared as soon as the interview began."
+  },
+  {
+    "word": "dilettante",
+    "pos": "noun",
+    "definition": "a person who studies a subject only casually",
+    "example": "She was no dilettante; she had researched the topic for a decade."
+  },
+  {
+    "word": "pundit",
+    "pos": "noun",
+    "definition": "an expert who frequently gives opinions in public",
+    "example": "Several political pundits debated the result on television."
+  },
+  {
+    "word": "pariah",
+    "pos": "noun",
+    "definition": "a person rejected or avoided by a group",
+    "example": "After the scandal, the once-popular executive became a pariah."
+  },
+  {
+    "word": "wanderlust",
+    "pos": "noun",
+    "definition": "a strong desire to travel",
+    "example": "A year of staying home only intensified her wanderlust."
+  },
+  {
+    "word": "cosmopolitan",
+    "pos": "adjective",
+    "definition": "familiar and comfortable with many cultures",
+    "example": "Auckland’s cosmopolitan food scene reflects communities from around the world."
+  },
+  {
+    "word": "insular",
+    "pos": "adjective",
+    "definition": "narrow in outlook and isolated from outside ideas",
+    "example": "The committee became insular and stopped listening to new members."
+  },
+  {
+    "word": "sedulous",
+    "pos": "adjective",
+    "definition": "hard-working, careful, and persistent",
+    "example": "Her sedulous preparation was obvious in every detail of the presentation."
+  },
+  {
+    "word": "restive",
+    "pos": "adjective",
+    "definition": "restless and difficult to control",
+    "example": "Passengers grew restive after the third unexplained delay."
+  },
+  {
+    "word": "peruse",
+    "pos": "verb",
+    "definition": "to read or examine carefully",
+    "example": "Please peruse the contract before signing it."
+  },
+  {
+    "word": "punctilious",
+    "pos": "adjective",
+    "definition": "very careful about small details and correct behaviour",
+    "example": "He was punctilious about recording every expense."
+  },
+  {
+    "word": "equivocate",
+    "pos": "verb",
+    "definition": "to speak vaguely in order to avoid committing to an answer",
+    "example": "When asked about the deadline, the contractor began to equivocate."
+  },
+  {
+    "word": "gratuitous",
+    "pos": "adjective",
+    "definition": "unnecessary or not justified by the situation",
+    "example": "The film avoided gratuitous violence."
+  },
+  {
+    "word": "burnish",
+    "pos": "verb",
+    "definition": "to polish something, or to improve a reputation",
+    "example": "The award helped burnish the company’s public image."
+  },
+  {
+    "word": "quiescent",
+    "pos": "adjective",
+    "definition": "temporarily inactive or quiet",
+    "example": "The volcano has remained quiescent for several decades."
+  },
+  {
+    "word": "remiss",
+    "pos": "adjective",
+    "definition": "careless in performing a duty",
+    "example": "I would be remiss if I failed to thank the volunteers."
+  },
+  {
+    "word": "placid",
+    "pos": "adjective",
+    "definition": "calm and peaceful",
+    "example": "The lake remained placid despite the wind in the hills."
+  },
+  {
+    "word": "rambunctious",
+    "pos": "adjective",
+    "definition": "noisy, energetic, and difficult to control",
+    "example": "The rambunctious puppies raced around the kitchen."
+  },
+  {
+    "word": "susurrus",
+    "pos": "noun",
+    "definition": "a soft whispering or rustling sound",
+    "example": "A susurrus of leaves followed us along the path."
+  },
+  {
+    "word": "raucous",
+    "pos": "adjective",
+    "definition": "loud, rough, and disorderly",
+    "example": "Raucous laughter spilled out of the crowded bar."
+  },
+  {
+    "word": "prudent",
+    "pos": "adjective",
+    "definition": "careful and sensible about future consequences",
+    "example": "Keeping an emergency fund is a prudent habit."
+  },
+  {
+    "word": "wary",
+    "pos": "adjective",
+    "definition": "cautious because danger or difficulty may be present",
+    "example": "The cat remained wary of the unfamiliar visitor."
+  },
+  {
+    "word": "impetuous",
+    "pos": "adjective",
+    "definition": "acting quickly without enough thought",
+    "example": "Buying the car on the same day was an impetuous decision."
+  }
+];
+  </script>
+  <script>
+const WORDS_PER_DAY = 5;
+const words = window.VOCAB_WORDS;
+
+const dateKey = new Date().toISOString().slice(0, 10);
+const progressKey = `daily-five-progress-${dateKey}`;
+
+const dateLabel = document.querySelector("#dateLabel");
+const learnedCount = document.querySelector("#learnedCount");
+const grid = document.querySelector("#wordGrid");
+const template = document.querySelector("#wordCardTemplate");
+const shuffleButton = document.querySelector("#shuffleButton");
+const resetButton = document.querySelector("#resetButton");
+
+dateLabel.textContent = new Intl.DateTimeFormat("en-NZ", {
+  weekday: "long",
+  day: "numeric",
+  month: "long"
+}).format(new Date());
+
+function hashString(value) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i++) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function seededRandom(seed) {
+  let state = seed >>> 0;
+  return function () {
+    state += 0x6D2B79F5;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function seededShuffle(items, seedText) {
+  const result = [...items];
+  const random = seededRandom(hashString(seedText));
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+const dailyWords = seededShuffle(words, dateKey).slice(0, WORDS_PER_DAY);
+let displayWords = [...dailyWords];
+
+function readProgress() {
+  try {
+    return JSON.parse(localStorage.getItem(progressKey)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function writeProgress(progress) {
+  localStorage.setItem(progressKey, JSON.stringify(progress));
+}
+
+function refreshCount() {
+  const progress = readProgress();
+  const count = dailyWords.filter(item => progress[item.word]).length;
+  learnedCount.textContent = count;
+}
+
+function render() {
+  const progress = readProgress();
+  grid.innerHTML = "";
+
+  displayWords.forEach((item, index) => {
+    const fragment = template.content.cloneNode(true);
+    const card = fragment.querySelector(".word-card");
+    const reveal = fragment.querySelector(".reveal");
+    const details = fragment.querySelector(".details");
+    const checkbox = fragment.querySelector(".learned");
+
+    fragment.querySelector(".number").textContent = String(index + 1).padStart(2, "0");
+    fragment.querySelector(".part").textContent = item.pos;
+    fragment.querySelector(".word").textContent = item.word;
+    fragment.querySelector(".definition").textContent = item.definition;
+    fragment.querySelector(".example").textContent = `“${item.example}”`;
+
+    checkbox.checked = Boolean(progress[item.word]);
+    card.classList.toggle("complete", checkbox.checked);
+
+    reveal.addEventListener("click", () => {
+      const isHidden = details.hidden;
+      details.hidden = !isHidden;
+      reveal.textContent = isHidden ? "Hide meaning" : "Reveal meaning";
+    });
+
+    checkbox.addEventListener("change", () => {
+      const next = readProgress();
+      next[item.word] = checkbox.checked;
+      writeProgress(next);
+      card.classList.toggle("complete", checkbox.checked);
+      refreshCount();
+    });
+
+    grid.appendChild(fragment);
+  });
+
+  refreshCount();
+}
+
+shuffleButton.addEventListener("click", () => {
+  displayWords = seededShuffle(displayWords, `${Date.now()}-${Math.random()}`);
+  render();
+});
+
+resetButton.addEventListener("click", () => {
+  localStorage.removeItem(progressKey);
+  render();
+});
+
+render();
+
+  </script>
 </body>
 </html>
