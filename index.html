@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e8">
+  <title>Daily Five — Vocabulary Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">VOCABULARY PRACTICE</p>
+        <h1>Daily Five</h1>
+      </div>
+      <div class="date-card">
+        <span id="dateLabel"></span>
+        <strong><span id="learnedCount">0</span>/5 learned</strong>
+      </div>
+    </header>
+
+    <section class="intro">
+      <p>Five words each day. Read the meaning, study the example, then mark the word as learned.</p>
+      <button id="shuffleButton" class="secondary" type="button">Shuffle order</button>
+    </section>
+
+    <section id="wordGrid" class="word-grid" aria-live="polite"></section>
+
+    <footer>
+      <p>Your progress is stored in this browser.</p>
+      <button id="resetButton" class="text-button" type="button">Reset today</button>
+    </footer>
+  </main>
+
+  <template id="wordCardTemplate">
+    <article class="word-card">
+      <div class="card-top">
+        <span class="number"></span>
+        <span class="part"></span>
+      </div>
+      <h2 class="word"></h2>
+      <button class="reveal" type="button">Reveal meaning</button>
+      <div class="details" hidden>
+        <p class="definition"></p>
+        <p class="example"></p>
+      </div>
+      <label class="learned-row">
+        <input class="learned" type="checkbox">
+        <span>Learned today</span>
+      </label>
+    </article>
+  </template>
+
+  <script src="data/words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
