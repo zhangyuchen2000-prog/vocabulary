@@ -232,6 +232,29 @@ footer {
   cursor: pointer;
 }
 
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: white;
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 11px 17px;
+  white-space: nowrap;
+  transition: .2s ease;
+}
+
+.primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(.96);
+}
+
 @media (max-width: 820px) {
   .word-card,
   .word-card:nth-child(4),
@@ -265,7 +288,10 @@ footer {
 
     <section class="intro">
       <p>Five words each day. Read the meaning, study the example, then mark the word as learned.</p>
-      <button id="shuffleButton" class="secondary" type="button">Shuffle order</button>
+      <div class="button-group">
+        <button id="shuffleButton" class="secondary" type="button">Shuffle order</button>
+        <button id="newBatchButton" class="primary" type="button">New 5 words</button>
+      </div>
     </section>
 
     <section id="wordGrid" class="word-grid" aria-live="polite"></section>
@@ -677,6 +703,8 @@ const words = window.VOCAB_WORDS;
 
 const dateKey = new Date().toISOString().slice(0, 10);
 const progressKey = `daily-five-progress-${dateKey}`;
+const seenKey = `daily-five-seen-${dateKey}`;
+const batchKey = `daily-five-batch-${dateKey}`;
 
 const dateLabel = document.querySelector("#dateLabel");
 const learnedCount = document.querySelector("#learnedCount");
@@ -684,6 +712,7 @@ const grid = document.querySelector("#wordGrid");
 const template = document.querySelector("#wordCardTemplate");
 const shuffleButton = document.querySelector("#shuffleButton");
 const resetButton = document.querySelector("#resetButton");
+const newBatchButton = document.querySelector("#newBatchButton");
 
 dateLabel.textContent = new Intl.DateTimeFormat("en-NZ", {
   weekday: "long",
@@ -721,7 +750,23 @@ function seededShuffle(items, seedText) {
   return result;
 }
 
-const dailyWords = seededShuffle(words, dateKey).slice(0, WORDS_PER_DAY);
+function getStoredBatch() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(batchKey));
+    if (Array.isArray(stored) && stored.length === WORDS_PER_DAY) {
+      const restored = stored
+        .map(wordText => words.find(item => item.word === wordText))
+        .filter(Boolean);
+      if (restored.length === WORDS_PER_DAY) return restored;
+    }
+  } catch {}
+  const firstBatch = seededShuffle(words, dateKey).slice(0, WORDS_PER_DAY);
+  localStorage.setItem(batchKey, JSON.stringify(firstBatch.map(item => item.word)));
+  localStorage.setItem(seenKey, JSON.stringify(firstBatch.map(item => item.word)));
+  return firstBatch;
+}
+
+let dailyWords = getStoredBatch();
 let displayWords = [...dailyWords];
 
 function readProgress() {
@@ -782,10 +827,40 @@ function render() {
   refreshCount();
 }
 
+function loadNewBatch() {
+  let seen = [];
+  try {
+    seen = JSON.parse(localStorage.getItem(seenKey)) || [];
+  } catch {}
+
+  let remaining = words.filter(item => !seen.includes(item.word));
+
+  if (remaining.length < WORDS_PER_DAY) {
+    seen = [];
+    remaining = [...words];
+  }
+
+  const nextBatch = seededShuffle(
+    remaining,
+    `${dateKey}-${Date.now()}-${Math.random()}`
+  ).slice(0, WORDS_PER_DAY);
+
+  dailyWords = nextBatch;
+  displayWords = [...nextBatch];
+
+  const updatedSeen = [...new Set([...seen, ...nextBatch.map(item => item.word)])];
+  localStorage.setItem(seenKey, JSON.stringify(updatedSeen));
+  localStorage.setItem(batchKey, JSON.stringify(nextBatch.map(item => item.word)));
+
+  render();
+}
+
 shuffleButton.addEventListener("click", () => {
   displayWords = seededShuffle(displayWords, `${Date.now()}-${Math.random()}`);
   render();
 });
+
+newBatchButton.addEventListener("click", loadNewBatch);
 
 resetButton.addEventListener("click", () => {
   localStorage.removeItem(progressKey);
